@@ -7,7 +7,7 @@ $pdo = PdoGsb::getPdoGsb();
 $estConnecte = estConnecte();
 if(!isset($_REQUEST['uc']) || !$estConnecte){
      $_REQUEST['uc'] = 'connexion';
-}	 
+}	 // gtné
 $uc = $_REQUEST['uc'];
 switch($uc){
 	case 'connexion':{
@@ -23,6 +23,7 @@ switch($uc){
 include("vues/v_pied.php") ;
 
 /** Hugo Joguet **/
+//VALENTIN
 ?>
 
 
