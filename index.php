@@ -7,7 +7,7 @@ $pdo = PdoGsb::getPdoGsb();
 $estConnecte = estConnecte();
 if(!isset($_REQUEST['uc']) || !$estConnecte){
      $_REQUEST['uc'] = 'connexion';
-}	 
+}	 // FAIS L'AMOUR A TA MAMAN STP 
 $uc = $_REQUEST['uc'];
 switch($uc){
 	case 'connexion':{
