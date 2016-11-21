@@ -16,7 +16,7 @@
 
 class PdoGsb{   		
       	private $serveur='mysql:host=localhost';
-      	private $bdd='dbname=gsb_new2';   		
+      	private $bdd='dbname=gsb_new2';		
       	private $user='userGsb' ;    		
       	private $mdp='secret' ;	
         private $monPdo; //objet de connection à la bdd
