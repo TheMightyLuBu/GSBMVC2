@@ -50,14 +50,24 @@ class PdoGsb{
  
  * @param $login 
  * @param $mdp
- * @return l'id, le nom et le prénom sous la forme d'un tableau associatif 
+ * @return l'id, le nom, le prénom et le type sous la forme d'un tableau associatif 
 */
-	public function getInfosVisiteur($login, $mdp){
-		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur 
-		where visiteur.login='$login' and visiteur.mdp='$mdp'";
+	public function getInfosUtilisateur($login, $mdp){
+		$req = "select type from utilisateur where utilisateur.login='$login' and utilisateur.mdp='$mdp'";
 		$rs = $this->monPdo->query($req);
 		$ligne = $rs->fetch();
-		return $ligne;
+                if ($ligne[0] === "V") {
+                    $req = "select id, nom, prenom, type FROM utilisateur inner JOIN visiteur on visiteur.login = utilisateur.login "
+                        . "where utilisateur.login='$login' and utilisateur.mdp='$mdp'";
+                                       
+                } else {
+                    $req = "select id, nom, prenom, type FROM utilisateur inner JOIN comptable on comptable.login = utilisateur.login "
+                        . "where utilisateur.login='$login' and utilisateur.mdp='$mdp'";
+                    
+                }
+                $rs = $this->monPdo->query($req);
+                $laLigne = $rs->fetch();
+		return $laLigne;
 	}
 
 /**
