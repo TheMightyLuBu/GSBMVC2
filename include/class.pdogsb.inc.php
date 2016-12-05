@@ -53,8 +53,8 @@ class PdoGsb{
  * @return l'id, le nom et le prénom sous la forme d'un tableau associatif 
 */
 	public function getInfosVisiteur($login, $mdp){
-		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur 
-		where visiteur.login='$login' and visiteur.mdp='$mdp'";
+		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur inner join utilisateur on visiteur.login = utilisateur.login 
+		where visiteur.login='$login' and utilisateur.mdp='$mdp'";
 		$rs = $this->monPdo->query($req);
 		$ligne = $rs->fetch();
 		return $ligne;
@@ -284,6 +284,16 @@ class PdoGsb{
 		$laLigne = $res->fetch();
 		return $laLigne;
 	}
+        
+   // Retourne le total des frais hors forfait pour une fiche de frais
+        public function getFraisHorsForfaitMensuel($idVisiteur,$leMois){
+            $req = "select Sum(lignefraishorsforfait.montant) as montantHorsForfait
+                    from  lignefraishorsforfait 
+                    where lignefraishorsforfait.idVisiteur ='$idVisiteur' and lignefraishorsforfait.mois = '$leMois'";
+                $res = $this->monPdo->query($req);
+		$laLigne = $res->fetch();
+		return $laLigne;
+        }
 /**
  * Modifie l'état et la date de modification d'une fiche de frais
  

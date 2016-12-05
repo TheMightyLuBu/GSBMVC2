@@ -3,8 +3,11 @@
     <p>
         <strong>Etat : </strong>   
             <?php echo $libEtat?> depuis le <?php echo $dateModif?> <br> 
-            <strong> Montant des frais :</strong> <span class="label label-info">  <?php echo $montantValide?> </span>            
-                 
+            <strong> Montant des frais forfaitisés:</strong> <span class="label label-info">  <?php echo $montantValide?> </span>   
+            </br>
+            <strong> Montant des frais hors-forfaits :</strong> <span class="label label-info"><?php echo $montantHorsForfait  ?></span>
+            </br>
+            <strong> Montant des frais totaux :</strong> <span class="label label-info"><?php echo $montantValide + $montantHorsForfait  ?></span>
     </p>
   	<table class="table table-bordered">
   	   <caption>Eléments forfaitisés </caption>
@@ -46,7 +49,8 @@
              <tr>
                 <th class="date">Date</th>
                 <th class="libelle">Libellé</th>
-                <th class='montant'>Montant</th>                
+                <th class='montant'>Montant</th> 
+                
              </tr>
             </thead>
             <tbody>
@@ -54,10 +58,21 @@
           foreach ( $lesFraisHorsForfait as $unFraisHorsForfait ) 
 		  {
 			$date = $unFraisHorsForfait['date'];
-			$libelle = $unFraisHorsForfait['libelle'];
-			$montant = $unFraisHorsForfait['montant'];
-		?>
-             <tr>
+			$libelle = $unFraisHorsForfait['libelle'];			
+                        $montant = $unFraisHorsForfait['montant'];
+                        $suppr = $unFraisHorsForfait['supprime'];
+                        $title = $unFraisHorsForfait['motifSuppresion'];
+                        if($suppr == 1)  
+                        { 
+                            $fond = '#FF0000';                             
+                        }
+                        else{
+                            $fond = '#FFFFFF';     
+                            $title = 'Bonjour';
+                        }
+		
+             echo "<tr title=" . $title . " style='background-color:" . $fond . ";'>"; 
+              ?>  
                 <td><?php echo $date ?></td>
                 <td><?php echo $libelle ?></td>
                 <td><?php echo $montant ?></td>
