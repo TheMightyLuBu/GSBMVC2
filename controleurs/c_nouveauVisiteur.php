@@ -17,7 +17,6 @@ switch($action){
                     $login = generationLogin($nom, $prenom);
                     $login = $pdo->verifLoginVisiteur($login);
                     $pdo->creerNouveauVisiteur($id, $nom, $prenom, $login, $adresse, $cp, $ville, $dateEmbauche, $mdp);
-                    echo $dateEmbauche;
                     echo "<h3 class='text-info'>L'utilisateur a bien été créé !</h3>";
                     echo "<h3>Login : ".$login."</h3>";
                     echo "<h3>Mot de passe : ".$mdpAvantMD5."</h3>";
