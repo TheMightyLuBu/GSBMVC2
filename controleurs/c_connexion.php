@@ -11,6 +11,7 @@ switch($action){
 	case 'valideConnexion':{
 		$login = $_REQUEST['login'];
 		$mdp = $_REQUEST['mdp'];
+                $mdp = md5($mdp);
 		$utilisateur = $pdo->getInfosUtilisateur($login,$mdp);
 		if(!is_array( $utilisateur)){
 			ajouterErreur("Login ou mot de passe incorrect","connexion");
@@ -21,7 +22,10 @@ switch($action){
 			$nom =  $utilisateur['nom'];
 			$prenom = $utilisateur['prenom'];
                         $type = $utilisateur['type'];
-			connecter($id,$nom,$prenom,$type);
+                        $derniereConnexion = $utilisateur['derniereConnexion'];
+			connecter($id,$nom,$prenom,$type,$derniereConnexion);
+                        $derniereConnexion = date('Y-m-d h:i:s');
+                        $pdo->majDateDerniereConnexion($derniereConnexion, $login);
                         
 			include("vues/v_sommaire.php");
 		}

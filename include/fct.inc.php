@@ -21,11 +21,13 @@ function estConnecte(){
  * @param $prenom
  * @param $type
  */
-function connecter($id,$nom,$prenom,$type){
+function connecter($id,$nom,$prenom,$type,$derniereConnexion){
 	$_SESSION['idVisiteur']= $id; 
 	$_SESSION['nom']= $nom;
 	$_SESSION['prenom']= $prenom;
         $_SESSION['type']= $type;
+        $_SESSION['derniereConnexion']= $derniereConnexion;
+        
 }
 /**
  * Détruit la session active
@@ -201,5 +203,64 @@ function nbErreurs(){
 	else{
 	   return count($_REQUEST['erreurs']);
 	}
+}
+
+/**
+ * Retourne un ID généré aléatoirement, à partir de chiffres et de lettres
+ * 
+ * @param type $nb_car
+ * @param type $chaine
+ * @return type
+ */
+
+function generationId($nb_car, $chaine = 'azertyuiopqsdfghjklmwxcvbn123456789'){
+    $nb_lettres = strlen($chaine) - 1;
+    $generation = '';
+    $pos = mt_rand(0, 26);
+    $car = $chaine[$pos];
+    $generation .= $car;
+    for($i=1; $i < $nb_car; $i++){
+        $pos = mt_rand(27, $nb_lettres);
+        $car = $chaine[$pos];
+        $generation .= $car;
+    }
+    return $generation;
+}
+
+/**
+ * Retourne un mot de passe généré aléatoirement, à partir de chiffres et de lettres
+ * 
+ * @param type $nb_car
+ * @param type $chaine
+ * @return type
+ */
+
+function generationMdp($nb_car, $chaine = 'azertyuiopqsdfghjklmwxcvbn123456789')
+{
+    $nb_lettres = strlen($chaine) - 1;
+    $generation = '';
+    for($i=0; $i < $nb_car; $i++)
+    {
+        $pos = mt_rand(0, $nb_lettres);
+        $car = $chaine[$pos];
+        $generation .= $car;
+    }
+    return $generation;
+}
+
+/**
+ * Retourne le login du visiteur selon la 1ère lettre de son prénom suivie de son nom
+ * 
+ * @param type $nom
+ * @param type $prenom
+ * @return string
+ */
+
+function generationLogin($nom, $prenom){
+    $nom = strtolower($nom);
+    $prenom = strtolower($prenom);
+    $premiereLettrePrenom = $prenom[0];
+    $login = $premiereLettrePrenom.$nom;
+    return $login;
 }
 ?>

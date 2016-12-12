@@ -15,6 +15,11 @@
                 }
                 ?>
         </h5>
+        <h6>
+            <?php
+                echo $_SESSION['derniereConnexion'];
+            ?>
+        </h6>
         
         
         <ul class="list-unstyled">
@@ -38,7 +43,7 @@
               <a href="index.php?uc=suiviPaiement&action=suivrePaiementFrais" title="Suivre le paiement des fiches de frais">Suivre le paiement des fiches de frais</a>
            </li>
            <li>
-              <a href="index.php?uc=nouvelUtilisateur&action=creerUtilisateur" title="Créer un nouveau visiteur">Créer un nouveau visiteur</a>
+              <a href="index.php?uc=nouveauVisiteur&action=creerUtilisateur" title="Créer un nouveau visiteur">Créer un nouveau visiteur</a>
            </li>
  	   <li>
               <a href="index.php?uc=connexion&action=deconnexion" title="Se déconnecter">Déconnexion</a>

@@ -20,7 +20,7 @@ class PdoGsb{
       	private $user='userGsb' ;    		
       	private $mdp='secret' ;	
         private $monPdo; //objet de connection à la bdd
-	    private static $monPdoGsb=null; //instance unique de la classe
+	private static $monPdoGsb=null; //instance unique de la classe
 /**
  * Constructeur privé, crée l'instance de PDO qui sera sollicitée
  * pour toutes les méthodes de la classe
@@ -57,11 +57,11 @@ class PdoGsb{
 		$rs = $this->monPdo->query($req);
 		$ligne = $rs->fetch();
                 if ($ligne[0] === "V") {
-                    $req = "select id, nom, prenom, type FROM utilisateur inner JOIN visiteur on visiteur.login = utilisateur.login "
+                    $req = "select id, nom, prenom, type, derniereConnexion FROM utilisateur inner JOIN visiteur on visiteur.login = utilisateur.login "
                         . "where utilisateur.login='$login' and utilisateur.mdp='$mdp'";
                                        
                 } else {
-                    $req = "select id, nom, prenom, type FROM utilisateur inner JOIN comptable on comptable.login = utilisateur.login "
+                    $req = "select id, nom, prenom, type, derniereConnexion FROM utilisateur inner JOIN comptable on comptable.login = utilisateur.login "
                         . "where utilisateur.login='$login' and utilisateur.mdp='$mdp'";
                     
                 }
@@ -69,6 +69,11 @@ class PdoGsb{
                 $laLigne = $rs->fetch();
 		return $laLigne;
 	}
+        
+        public function majDateDerniereConnexion($derniereConnexion, $login){
+            $req = "update utilisateur set derniereConnexion = '$derniereConnexion' where login = '$login'";
+            $this->monPdo->exec($req);
+        }
 
 
 /**
@@ -318,6 +323,54 @@ class PdoGsb{
 		where fichefrais.idvisiteur ='$idVisiteur' and fichefrais.mois = '$mois'";
 		$this->monPdo->exec($req);
 	}
+        
+/**
+ * Créer un nouveau visiteur
+ * 
+ * Ajoute les informations du visiteur dans la table Visiteur de la base de données, 
+ * ainsi que ses informations de connexion dans la table Utilisateur
+ * @param type $id
+ * @param type $nom
+ * @param type $prenom
+ * @param type $login
+ * @param type $adresse
+ * @param type $cp
+ * @param type $ville
+ * @param type $dateEmbauche
+ * @param type $mdp
+ * @param type $type
+ * @param type $derniereCo
+ */
+        public function creerNouveauVisiteur($id, $nom, $prenom, $login, $adresse, $cp, $ville, $dateEmbauche, $mdp){
+            $req = "insert into utilisateur values('$login', '$mdp', 'V', '0000-00-00 00:00:00');"
+                . "insert into visiteur values('$id', '$nom', '$prenom', '$login', '$adresse', $cp, '$ville', '$dateEmbauche')";
+            $this->monPdo->exec($req);            
+        }
+        
+        /**
+         * Vérifie si le login passé en paramètres existe déjà dans la table Utilisateur.
+         * Si non, le login est retourné sans aucune modification.
+         * Si oui, le login est retourné avec un numéro permettant la distinction entre deux mêmes login
+         * 
+         * @param type $login
+         * @return int
+         */
+        
+        public function verifLoginVisiteur($login){
+            $req = "select COUNT(*) from utilisateur where login ='$login'";
+            $res = $this->monPdo->query($req)->fetch();
+            $i = 0;
+            if ($res['COUNT(*)'] != 1) {
+                return $login;
+            }
+            while ($res['COUNT(*)'] == 1) {
+                $i++;
+                $req = "select COUNT(*) from utilisateur where login ='$login$i'";
+                $res = $this->monPdo->query($req)->fetch();
+            }
+            $login .= $i;
+            return $login;
+        }
         
         
 }
